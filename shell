@@ -1,0 +1,80 @@
+//this is where the shell code goes
+//but .......not yet
+//or maybe this: its in c++ so no good
+
+//************************
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
+
+void type_prompt()
+{
+   
+    printf("fjShell##:"); //display prompt
+}
+
+void read_command ( char cmd[], char *par[] )
+{
+    char line[1024];
+    int count = 0, i = 0,  j = 0;
+    char *array[100], *pch;
+    
+    //read one line
+    for( ;; )
+    {
+        int c = fgetc ( stdin );
+        line[count++] = (char) c;
+        if ( c == '\n')
+            break;
+    }
+    if (count == 1)
+        return;
+        
+    pch = strtok ( line, "\n");
+        
+    //parse the line into words
+    while ( pch != NULL)
+    {
+        array[i++] = strdup ( pch );
+        pch = strtok (NULL, "\n");
+    }
+        
+    //first word is the command
+    strcpy ( cmd, array[0] );
+        
+    //others are parameters
+    for ( j = 0; j < 1; j++)
+        par[j] = array[j];
+    
+    par[i] = NULL; //NULL, terminate the parameter list
+}
+
+
+int main()
+{
+    char cmd[100], command[100], *parameters[20]; //2 arrays to hold the commands and an array of pointers to hold the parameters
+    char *envp[] = { (char *) "PATH=/bin", 0}; //this array defines the environment variables, this assumes the commands reqested are within directories bin
+    
+    while (1)//infinate loop until exit
+    {
+        type_prompt();//display prompt, doesn't need to be a function
+        read_command ( command, parameters );//reads input from terminal user enrty
+        
+        if ( fork() != 0 )//creates the child
+        {
+            wait (NULL);
+        }
+        else
+        {
+            strcpy ( cmd, "/bin/" );//child copies the bin in the array cmd
+            strcat ( cmd, command );//child concatenates the command the user entered to cmd
+            execve ( cmd, parameters, envp );//child execute the command with parameter
+        }
+        if ( strcmp ( command, "exit" ) == 0 ) //this exits the loop and finishes program
+            break;
+    }
+    return 0;
+}
