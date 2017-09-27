@@ -13,6 +13,7 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<string.h>
+#include<stdlib.h>
 
 #define MAX_LINE 80 /* The maximum lenth command */
 
@@ -30,27 +31,42 @@ int i=0;
 	fgets(input_buffer,MAX_LINE + 1, stdin);
 	token = strtok(input_buffer," ");
  	for(i = 0; token != NULL; ++i){
-	/* printf(" %s\n", token);*/
 	 args[i] = token;
-	 printf("%s\n", args[i]);
+        printf(" 1 ");
 	 token = strtok(NULL," ");
 	}
 
-
+	++i; /* Increment the index for a terminating NULL */
+	args[i] = NULL;
 	/* After reading user input, the steps are:*/
-
+	printf(" 2 ");	
 	/* (1) fork a child process using fork()*/
 	pid = fork();
 	/* (2) the child process will invoke execvp()*/
-	if(pid == 0){
 
+	if(pid < 0){
+		printf("ERROR: forking child failed");
+		exit(1);
+	}
+	else if(pid == 0){
+		if(execvp(*args,args) < 0) {
+		printf("ERROR: execvp() Failed!\n");
+		exit(1);
+		}
+		printf("Clean Exit\n");
+		exit(0);
 	}else{
+		printf(" 4 ");
+		printf("\n");
+		/* (3) if command included &, parent will invoke wait()*/
+		if(args[i-1] == "&"){
+	  	wait();
+	 	} 
+		printf("Parent Exiting\n");
 
-	}
-	/* (3) if command included &, parent will invoke wait()*/
+	 }
 
-	}
+	} /* end of while(should_run) */
 
 	return 0;
-
 }
