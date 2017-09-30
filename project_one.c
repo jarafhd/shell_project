@@ -32,14 +32,12 @@ int i=0;
 	token = strtok(input_buffer," ");
  	for(i = 0; token != NULL; ++i){
 	 args[i] = token;
-        printf(" 1 ");
+         printf(" 1) %s\n",args[i]);
 	 token = strtok(NULL," ");
 	}
-
-	++i; /* Increment the index for a terminating NULL */
 	args[i] = NULL;
 	/* After reading user input, the steps are:*/
-	printf(" 2 ");	
+	printf("forking child now\n");	
 	/* (1) fork a child process using fork()*/
 	pid = fork();
 	/* (2) the child process will invoke execvp()*/
@@ -49,19 +47,23 @@ int i=0;
 		exit(1);
 	}
 	else if(pid == 0){
-		if(execvp(*args,args) < 0) {
+	        printf("In Child:%s\n",args[0]);
+       		printf("In Child:%s\n",args[1]);
+       		printf("In Child:%s\n",args[2]);
+		printf("i = %d\n", i);
+		if(execvp(*args[0],args) == -1) {
 		printf("ERROR: execvp() Failed!\n");
 		exit(1);
 		}
-		printf("Clean Exit\n");
+		printf("Clean Child Exit\n");
 		exit(0);
 	}else{
-		printf(" 4 ");
 		printf("\n");
 		/* (3) if command included &, parent will invoke wait()*/
 		if(args[i-1] == "&"){
 	  	wait();
-	 	} 
+	 	}
+		wait(); 
 		printf("Parent Exiting\n");
 
 	 }
