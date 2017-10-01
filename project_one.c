@@ -109,7 +109,7 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 		if(strcmp(args[i-1], "&") == 0){
 			wait(NULL);
 	 	}
-		wait(NULL); 
+		/*wait(NULL);*/ 
 	  }
 
 
