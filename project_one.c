@@ -19,7 +19,7 @@
 #define MAX_HISTORY_SIZE 10 /* History buffer size */
 
 
-void 	printHistory(char* history_buffer[],int h,int flag){
+void 	printHistory(char* history_buffer[][MAX_LINE],int h,int flag){
 	int i;
 	if(flag == 0){ /* array has not looped around */
 	printf("in flag 0\n");	
@@ -41,6 +41,7 @@ void 	printHistory(char* history_buffer[],int h,int flag){
 }/* end of print_history */
 
 
+
 /* === Main ====================================================================================
 ===============================================================================================*/
 
@@ -52,7 +53,7 @@ pid_t pid;
 char input_buffer[MAX_LINE];
 char* token;
 int i;
-char* history_buffer[MAX_HISTORY_SIZE];
+char history_buffer[MAX_HISTORY_SIZE][MAX_LINE];
 int h = 0; /* h denotes the mosts current element in the the history array */
 int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wrapped around */
 
@@ -62,8 +63,8 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 	fflush(stdout);
 	fgets(input_buffer,MAX_LINE + 1, stdin);
 	printf("h is %d\n",h);
-	strcpy(history_buffer[h],input_buffer);
-	//strlen(*history_buffer[h])
+	strncpy(history_buffer[h], input_buffer, MAX_LINE);
+	printf("history_buffer[h] equals %s\n", history_buffer[h]);
 	token = strtok(input_buffer,"\n");
 	token = strtok(token," ");
  	for(i = 0; token != NULL; ++i){
@@ -79,7 +80,12 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 		break;
 	
 	}else if(strcmp(args[0],"history") ==  0){
-	printHistory(history_buffer,h,flag);
+		printf("history_buffer[0] equals %s\n", history_buffer[0]);
+		printf("history_buffer[1] equals %s\n", history_buffer[1]);
+		printf("history_buffer[2] equals %s\n", history_buffer[2]);
+		printf("history_buffer[3] equals %s\n", history_buffer[3]);
+
+//	printHistory(history_buffer,h,flag);
 	}
 
 	/* After reading user input, the steps are:*/
@@ -121,5 +127,3 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 
 	return 0;
 }
-
-
