@@ -19,7 +19,7 @@
 #define MAX_HISTORY_SIZE 10 /* History buffer size */
 
 
-void 	printHistory(char* history_buffer[][MAX_LINE],int h,int flag){
+void 	printHistory(char history_buffer[][MAX_LINE],int h,int flag){
 	int i;
 	if(flag == 0){ /* array has not looped around */
 	printf("in flag 0\n");	
@@ -56,7 +56,8 @@ int i;
 char history_buffer[MAX_HISTORY_SIZE][MAX_LINE];
 int h = 0; /* h denotes the mosts current element in the the history array */
 int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wrapped around */
-
+/**/char tempchar;
+/**/char chararray[10];
 
 	while (should_run) {
 	printf("osh> ");
@@ -74,22 +75,24 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 	}
 	args[i] = NULL;
 
+/* priming test for for character '!' to implement history  techniques */
+/**/	chararray = args[0];
+/**/	tempchar = chararray[0];
+/**/	printf("%c\n", tempchar);
+/**/	printf("tempchar is: %c\n", tempchar);
+	
 	if(strcmp(args[0],"exit") == 0 ){
 		printf("Exiting OSC Shell\n");
 		should_run = 0;
 		break;
 	
 	}else if(strcmp(args[0],"history") ==  0){
-		printf("history_buffer[0] equals %s\n", history_buffer[0]);
-		printf("history_buffer[1] equals %s\n", history_buffer[1]);
-		printf("history_buffer[2] equals %s\n", history_buffer[2]);
-		printf("history_buffer[3] equals %s\n", history_buffer[3]);
+		printHistory(history_buffer,h,flag);
+/**/	}else if( tempchar  =='!'){ /* bypasses the tokenized args[] to get previous commands*/
+/**/		printf("BINGO!\n");
+/**/		//retrievePrevCmd();
+/**/	}
 
-//	printHistory(history_buffer,h,flag);
-	}
-
-	/* After reading user input, the steps are:*/
-	printf("forking child now\n");
 	/* (1) fork a child process using fork()*/
 	pid = fork();
 	/* (2) the child process will invoke execvp()*/
@@ -99,31 +102,33 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 		exit(1);
 	}
 	else if(pid == 0){
-	       	printf("In Child: %s\n", args[0]);
-		printf("In Child: %s\n", args[1]);
-		printf("In Child: %s\n", args[2]);
-		if(execvp(args[0],args) == -1) {
-			printf("ERROR: execvp() Failed!\n");
-			exit(1);
+		if(strcmp(args[0],"history") != 0){
+				if(execvp(args[0],args) == -1){ 
+				printf("ERROR: execvp() Failed!\n");
+				exit(1);
+				}
 		}
-		printf("Clean Child Exit\n");
 		exit(0);
-	}else if(h < 10){
+	} /* end of child process block */ 
+	 else if(h < 10){
 		++h;
-	}else if(h == 10){
+	 }else if(h == 10){
 		h = 0;
 		flag = 1;
-	}else{
+	  }else{
 		printf("\n");
 		/* (3) if command included &, parent will invoke wait()*/
 		if(strcmp(args[i-1], "&") == 0){
 			wait(NULL);
 	 	}
-		// wait(NULL);
-		printf("Parent Exiting\n");
+		wait(NULL); 
+	  }
 
-	}
+
 	} /* end of while(should_run) */
 
 	return 0;
+
+
 }
+
