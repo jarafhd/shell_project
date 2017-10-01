@@ -22,13 +22,13 @@
 void 	printHistory(char history_buffer[][MAX_LINE],int h,int flag){
 	int i;
 	if(flag == 0){ /* array has not looped around */
-	printf("in flag 0\n");	
+	/*printf("in flag 0\n");*/	
 	for(i = h-1; i >= 0; --i){
 			printf("%d %s \n", i+1, history_buffer[i]);
 		}
 	}
 	else if(flag == 1){
-		printf("in flag 1\n");
+		/*printf("in flag 1\n");*/
 		if(h == 0){ h = 10;}
 		for(i= h-1;i >= 0;--i){
 			printf("%d %s \n", i+10, history_buffer[i]);
@@ -56,30 +56,22 @@ int i;
 char history_buffer[MAX_HISTORY_SIZE][MAX_LINE];
 int h = 0; /* h denotes the mosts current element in the the history array */
 int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wrapped around */
-/**/char tempchar;
-/**/char chararray[10];
 
 	while (should_run) {
 	printf("osh> ");
 	fflush(stdout);
 	fgets(input_buffer,MAX_LINE + 1, stdin);
-	printf("h is %d\n",h);
+	/*printf("h is %d\n",h);*/
 	strncpy(history_buffer[h], input_buffer, MAX_LINE);
-	printf("history_buffer[h] equals %s\n", history_buffer[h]);
+	/*printf("history_buffer[h] equals %s\n", history_buffer[h]);*/
 	token = strtok(input_buffer,"\n");
 	token = strtok(token," ");
  	for(i = 0; token != NULL; ++i){
 		args[i] = token;
-        	printf(" %d) %s\n", i, args[i]);
+        	/*printf(" %d) %s\n", i, args[i]);*/
 		token = strtok(NULL," ");
 	}
 	args[i] = NULL;
-
-/* priming test for for character '!' to implement history  techniques */
-/**/	chararray = args[0];
-/**/	tempchar = chararray[0];
-/**/	printf("%c\n", tempchar);
-/**/	printf("tempchar is: %c\n", tempchar);
 	
 	if(strcmp(args[0],"exit") == 0 ){
 		printf("Exiting OSC Shell\n");
@@ -88,11 +80,7 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 	
 	}else if(strcmp(args[0],"history") ==  0){
 		printHistory(history_buffer,h,flag);
-/**/	}else if( tempchar  =='!'){ /* bypasses the tokenized args[] to get previous commands*/
-/**/		printf("BINGO!\n");
-/**/		//retrievePrevCmd();
-/**/	}
-
+	}
 	/* (1) fork a child process using fork()*/
 	pid = fork();
 	/* (2) the child process will invoke execvp()*/
@@ -130,5 +118,4 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 	return 0;
 
 
-}
-
+} /* end of main() */
