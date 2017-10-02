@@ -23,19 +23,21 @@ void 	printHistory(char history_buffer[][MAX_LINE],int h,int flag){
 	int i;
 	if(flag == 0){ /* array has not looped around */
 	/*printf("in flag 0\n");*/	
-	for(i = h-1; i >= 0; --i){
+	for(i = h; i >= 0; --i){
 			printf("%d %s \n", i+1, history_buffer[i]);
 		}
 	}
+
 	else if(flag == 1){
+		int j = h;
 		/*printf("in flag 1\n");*/
-		if(h == 0){ h = 10;}
-		for(i= h-1;i >= 0;--i){
-			printf("%d %s \n", i+10, history_buffer[i]);
+		if(h == 0){ j = 9;}
+		for(i= j;i >= 0; --i){
+			printf("%d %s \n", i+1, history_buffer[i]);
 
 		}
-		for(i = MAX_HISTORY_SIZE - 1; i >= h; --i){
-			printf("%d %s \n", i, history_buffer[i]);
+		for(i = MAX_HISTORY_SIZE - 1; i >= h+1; --i){
+			printf("%d %s \n", i+1, history_buffer[i]);
 		}
 	}
 }/* end of print_history */
@@ -98,11 +100,11 @@ int flag = 0; /* flag denotes where or not history array has(1) or hasn't(0) wra
 		}
 		exit(0);
 	} /* end of child process block */ 
-	 else if(h < 10){
-		++h;
-	 }else if(h == 10){
+	 else if(h == 9){
 		h = 0;
 		flag = 1;
+	 }else if(h <= 8){
+		++h;
 	  }else{
 		printf("\n");
 		/* (3) if command included &, parent will invoke wait()*/
