@@ -1,11 +1,13 @@
 /* Filename: project_one.c
-*  Programmers:
-*  Date:
-*  Class:
-*  Instructor:
-*  Project Name:
-*  Description:
-*
+*  Programmers: Jose Ordaz and Faraj Haddad
+*  Date: 9/30/2017
+*  Class: CPSC 351 Open Operating System Concepts
+*  Instructor: William McCarthy
+*  Project Name: Shell with History
+*  Description: This program is a shell that keeps a running histroy of commands entered in the
+*	shell in a wrap around array and then prints the history in most recent to  least
+*	from the top down when the user enters the command "history". It quits the shell  
+*	 with the command "exit" and does not recall the command from previous use. 
 *
 *
 */
